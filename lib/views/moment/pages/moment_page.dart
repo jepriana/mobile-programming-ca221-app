@@ -42,7 +42,7 @@ class MomentPage extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      context.read<MomentBloc>().add(MomentNavigateBackEvent());
                     },
                     child: const Text('Cancel'),
                   ),
@@ -70,7 +70,7 @@ class MomentPage extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      context.read<MomentBloc>().add(MomentNavigateBackEvent());
                     },
                     child: const Text('Cancel'),
                   ),
