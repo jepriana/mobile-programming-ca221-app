@@ -4,7 +4,7 @@ import 'package:myapp/models/comment.dart';
 import 'package:faker/faker.dart' as faker;
 import 'package:nanoid2/nanoid2.dart';
 
-import 'commment_entry_page.dart';
+import 'comment_entry_page.dart';
 
 class CommentPage extends StatefulWidget {
   const CommentPage({super.key, required this.momentId});

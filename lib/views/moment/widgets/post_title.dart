@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/resources/colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:myapp/core/resources/colors.dart';
 
-import '../models/moment.dart';
+import '../../../models/moment.dart';
+import '../bloc/moment_bloc.dart';
 
 class PostTitle extends StatelessWidget {
   const PostTitle({
     super.key,
     required this.moment,
-    required this.onDelete,
-    required this.onUpdate,
   });
   final Moment moment;
-  final Function(String id) onDelete;
-  final Function(String id) onUpdate;
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +28,9 @@ class PostTitle extends StatelessWidget {
       trailing: PopupMenuButton<String>(
         onSelected: (value) {
           if (value == 'Edit') {
-            onUpdate(moment.id);
+            context.read<MomentBloc>().add(MomentNavigateToUpdateEvent(moment.id));
           } else if (value == 'Delete') {
-            onDelete(moment.id);
+            context.read<MomentBloc>().add(MomentNavigateToDeleteEvent(moment.id));
           }
         },
         itemBuilder: (context) => [

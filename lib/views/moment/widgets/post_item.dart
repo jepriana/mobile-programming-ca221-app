@@ -1,22 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/pages/comment_page.dart';
-import 'package:myapp/resources/dimentions.dart';
-import 'package:myapp/widgets/post_action.dart';
-import 'package:myapp/widgets/post_title.dart';
+import 'package:myapp/views/comment/pages/comment_page.dart';
+import 'package:myapp/core/resources/dimentions.dart';
+import 'package:myapp/views/moment/widgets/post_action.dart';
+import 'package:myapp/views/moment/widgets/post_title.dart';
 
-import '../models/moment.dart';
+import '../../../models/moment.dart';
 
 class PostItem extends StatelessWidget {
   const PostItem({
     super.key,
     required this.moment,
-    required this.onUpdate,
-    required this.onDelete,
   });
 
   final Moment moment;
-  final Function(String id) onUpdate;
-  final Function(String id) onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -40,8 +36,6 @@ class PostItem extends StatelessWidget {
           children: [
             PostTitle(
               moment: moment,
-              onUpdate: onUpdate,
-              onDelete: onDelete,
             ),
             Padding(
               padding: const EdgeInsets.all(smallSize),

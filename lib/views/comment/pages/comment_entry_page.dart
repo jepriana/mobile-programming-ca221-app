@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/resources/dimentions.dart';
+import 'package:myapp/core/resources/dimentions.dart';
 
-import '../models/moment.dart';
-import '../resources/colors.dart';
+import '../../../models/moment.dart';
+import '../../../core/resources/colors.dart';
 
 class CommentEntryPage extends StatefulWidget {
   const CommentEntryPage({super.key, required this.onSaved});
