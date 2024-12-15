@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:myapp/core/resources/dimentions.dart';
 
 class PostItemSquare extends StatelessWidget {
-  const PostItemSquare({super.key, required this.imageUrl});
+  const PostItemSquare({
+    super.key,
+    required this.momentId,
+    required this.imageUrl,
+  });
   final String imageUrl;
+  final String momentId;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +19,6 @@ class PostItemSquare extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(extraLargeSize),
           image: DecorationImage(
-            // image: AssetImage('assets/images/moments_background_dark.png'),
             image: NetworkImage(imageUrl),
             fit: BoxFit.cover,
           ),

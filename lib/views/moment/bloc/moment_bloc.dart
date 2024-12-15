@@ -74,7 +74,7 @@ class MomentBloc extends Bloc<MomentEvent, MomentState> {
       MomentUpdateEvent event, Emitter<MomentState> emit) async {
     emit(MomentUpdatingState());
     try {
-      final existingMoment = getMomentById(event.updatedMoment.id);
+      final existingMoment = getMomentById(event.updatedMoment.id!);
       if (existingMoment != null) {
         await _momentRepository.updateMoment(event.updatedMoment);
         _moments[_moments.indexOf(existingMoment)] = event.updatedMoment;

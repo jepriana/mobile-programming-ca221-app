@@ -46,24 +46,24 @@ class PostItem extends StatelessWidget {
                     children: [
                       PostAction(
                         icon: 'assets/icons/fi-br-heart.svg',
-                        label: moment.likeCount.toString(),
+                        label: moment.totalLikes.toString(),
                         onTap: () {},
                       ),
                       PostAction(
                         icon: 'assets/icons/fi-br-comment.svg',
-                        label: moment.commentCount.toString(),
+                        label: moment.totalComments.toString(),
                         onTap: () {
                           Navigator.of(context)
                               .push(MaterialPageRoute(builder: (context) {
                             return CommentPage(
-                              momentId: moment.id,
+                              momentId: moment.id!,
                             );
                           }));
                         },
                       ),
                       PostAction(
                         icon: 'assets/icons/fi-br-bookmark.svg',
-                        label: moment.bookmarkCount.toString(),
+                        label: moment.totalBookmarks.toString(),
                         onTap: () {},
                       ),
                     ],

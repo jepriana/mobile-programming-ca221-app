@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:myapp/core/resources/dimentions.dart';
+import 'package:myapp/models/moment.dart';
 import 'package:myapp/views/authentication/bloc/authentication_bloc.dart';
+import 'package:myapp/views/user/widgets/follow_item.dart';
+import 'package:nanoid2/nanoid2.dart';
+import 'package:faker/faker.dart' as faker;
+
+import '../../moment/widgets/post_item_square.dart';
+import 'user_setting_page.dart';
 
 class UserPage extends StatelessWidget {
   static const routeName = '/user';
@@ -10,11 +17,31 @@ class UserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final activeUser = context.watch<AuthenticationBloc>().activeUser;
+    final _faker = faker.Faker();
+    List<Moment> moments = List.generate(
+      6,
+      (index) => Moment(
+        id: nanoid(),
+        momentDate: _faker.date.dateTime(),
+        creatorUsername: _faker.person.name(),
+        location: _faker.address.city(),
+        imageUrl: 'https://picsum.photos/800/600?random=$index',
+        caption: _faker.lorem.sentence(),
+        totalLikes: faker.random.integer(1000),
+        totalComments: faker.random.integer(100),
+        totalBookmarks: faker.random.integer(10),
+      ),
+    );
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: largeSize),
       child: Column(
         children: [
           Card(
+            margin: const EdgeInsets.all(smallSize),
+            elevation: 1,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(extraLargeSize),
+            ),
             child: Column(
               children: [
                 ListTile(
@@ -27,6 +54,18 @@ class UserPage extends StatelessWidget {
                       ? '${activeUser.firstName} ${activeUser.lastName}'.trim()
                       : 'User Full Name'),
                   subtitle: Text(activeUser?.username ?? 'Username'),
+                  trailing: IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, UserSettingPage.routeName);
+                    },
+                    icon: const Icon(
+                      Icons.settings_rounded,
+                    ),
+                  ),
+                ),
+                const Divider(
+                  indent: largeSize,
+                  endIndent: largeSize,
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(
@@ -36,14 +75,23 @@ class UserPage extends StatelessWidget {
                     largeSize,
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Followers: ${activeUser?.followerCount ?? 0}',
+                      FollowItem(
+                        label: 'Posts',
+                        value: moments.length.toString(),
                       ),
-                      const SizedBox(width: mediumSize),
-                      Text(
-                        'Following: ${activeUser?.followingCount ?? 0}',
+                      const FollowItem(
+                        label: 'Bookmarks',
+                        value: '0',
+                      ),
+                      FollowItem(
+                        label: 'Followers',
+                        value: '${activeUser?.followerCount ?? 0}',
+                      ),
+                      FollowItem(
+                        label: 'Following',
+                        value: '${activeUser?.followingCount ?? 0}',
                       ),
                     ],
                   ),
@@ -51,14 +99,18 @@ class UserPage extends StatelessWidget {
               ],
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.logout_rounded),
-            title: const Text('Logout'),
-            onTap: () {
-              context
-                  .read<AuthenticationBloc>()
-                  .add(AuthenticationLoggedOutEvent());
-            },
+          const SizedBox(height: largeSize),
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+              ),
+              itemBuilder: (context, index) => PostItemSquare(
+              momentId: moments[index].id!,
+                imageUrl: moments[index].imageUrl,
+              ),
+              itemCount: moments.length,
+            ),
           ),
         ],
       ),

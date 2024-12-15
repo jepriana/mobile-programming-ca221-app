@@ -7,7 +7,7 @@ class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._privateConstructor();
   static Database? _database;
   final String databaseName = 'moments.db';
-  final int databaseVersion = 1;
+  final int databaseVersion = 2;
   static const String tableMoments = 'moments';
   static const String tableComments = 'comments';
 
@@ -37,11 +37,23 @@ class DatabaseHelper {
     await _newInVersion1(db);
   }
 
-  FutureOr<void> _onUpgrade(Database db, int oldVersion, int newVersion) {}
+  FutureOr<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await _upgradeToVersion2(db);
+    }
+  }
 
   Future close() async {
     final db = await database;
     db.close();
+  }
+
+  Future<void> dropTable(Database db, String tableName) async {
+    try {
+      await db.execute('DROP TABLE IF EXISTS $tableName');
+    } catch (_) {
+      rethrow;
+    }
   }
 
   Future<void> _newInVersion1(Database db) async {
@@ -71,6 +83,48 @@ class DatabaseHelper {
       ''');
     } catch (e) {
       log(e.toString());
+    }
+  }
+
+  Future<void> _upgradeToVersion2(Database db) async {
+    try {
+      await dropTable(db, tableMoments);
+      await dropTable(db, tableComments);
+
+      await db.execute('''
+        CREATE TABLE $tableMoments (
+          id TEXT PRIMARY KEY,
+          creatorId TEXT,
+          creatorUsername TEXT,
+          creatorFullname TEXT,
+          momentDate TEXT,
+          caption TEXT,
+          location TEXT,
+          longitude REAL,
+          latitude REAL,
+          imageUrl TEXT,
+          totalLikes INTEGER,
+          totalComments INTEGER,
+          totalBookmarks INTEGER,
+          createdAt TEXT,
+          lastUpdatedAt TEXT
+        )
+      ''');
+
+      await db.execute('''
+        CREATE TABLE $tableComments (
+          id TEXT PRIMARY KEY,
+          creatorId TEXT,
+          creatorUsername TEXT,
+          creatorFullname TEXT,
+          momentId TEXT,
+          content TEXT,
+          createdAt TEXT,
+          lastUpdatedAt TEXT
+        )
+      ''');
+    } catch (_) {
+      rethrow;
     }
   }
 }

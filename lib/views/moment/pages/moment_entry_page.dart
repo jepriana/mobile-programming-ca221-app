@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:myapp/core/resources/dimentions.dart';
 import 'package:myapp/views/moment/bloc/moment_bloc.dart';
-import 'package:nanoid2/nanoid2.dart';
 
 import '../../../models/moment.dart';
 import '../../../core/resources/colors.dart';
@@ -27,7 +26,6 @@ class _MomentEntryPageState extends State<MomentEntryPage> {
   final _dataMoment = {};
   // Text Editing Controller untuk set nilai awal pada text field
   final _momentDateController = TextEditingController();
-  final _creatorController = TextEditingController();
   final _locationController = TextEditingController();
   final _imageUrlController = TextEditingController();
   final _captionController = TextEditingController();
@@ -49,7 +47,6 @@ class _MomentEntryPageState extends State<MomentEntryPage> {
   void _initExistingData(Moment moment) {
     _updatedMoment = moment;
     _momentDateController.text = _dateFormat.format(moment.momentDate);
-    _creatorController.text = moment.creator;
     _locationController.text = moment.location;
     _imageUrlController.text = moment.imageUrl;
     _captionController.text = moment.caption;
@@ -62,22 +59,25 @@ class _MomentEntryPageState extends State<MomentEntryPage> {
       // Menyimpan data inputan pengguna ke map _dataMoment
       _formKey.currentState!.save();
       // Membuat object moment baru
-      final moment = Moment(
-        id: widget.momentId ??
-            nanoid(), // Gunakan ID yang ada jika operasi update, jika tidak ada, buat ID baru
-        momentDate: _dataMoment['momentDate'],
-        creator: _dataMoment['creator'],
-        location: _dataMoment['location'],
-        imageUrl: _dataMoment['imageUrl'],
-        caption: _dataMoment['caption'],
-        likeCount: _updatedMoment?.likeCount ?? 0,
-        commentCount: _updatedMoment?.commentCount ?? 0,
-        bookmarkCount: _updatedMoment?.bookmarkCount ?? 0,
-      );
       // Menyimpan object moment ke list _moments
-      if (widget.momentId != null) {
-        context.read<MomentBloc>().add(MomentUpdateEvent(moment));
+      if (widget.momentId != null && _updatedMoment != null) {
+        context.read<MomentBloc>().add(
+              MomentUpdateEvent(
+                _updatedMoment!.copyWith(
+                  momentDate: _dataMoment['momentDate'],
+                  location: _dataMoment['location'],
+                  imageUrl: _dataMoment['imageUrl'],
+                  caption: _dataMoment['caption'],
+                ),
+              ),
+            );
       } else {
+        final moment = Moment(
+          momentDate: _dataMoment['momentDate'],
+          location: _dataMoment['location'],
+          imageUrl: _dataMoment['imageUrl'],
+          caption: _dataMoment['caption'],
+        );
         context.read<MomentBloc>().add(MomentAddEvent(moment));
       }
       // Menutup halaman create moment
@@ -150,29 +150,6 @@ class _MomentEntryPageState extends State<MomentEntryPage> {
                       if (newValue != null) {
                         _dataMoment['momentDate'] =
                             DateTime.tryParse(newValue) ?? DateTime.now();
-                      }
-                    },
-                  ),
-                  const Text('Creator'),
-                  TextFormField(
-                    controller: _creatorController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(0.0),
-                      ),
-                      hintText: 'Moment creator',
-                      prefixIcon: const Icon(Icons.person),
-                    ),
-                    keyboardType: TextInputType.name,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter moment creator';
-                      }
-                      return null;
-                    },
-                    onSaved: (newValue) {
-                      if (newValue != null) {
-                        _dataMoment['creator'] = newValue;
                       }
                     },
                   ),

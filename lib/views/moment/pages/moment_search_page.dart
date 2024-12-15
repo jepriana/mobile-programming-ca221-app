@@ -29,6 +29,7 @@ class MomentSearchPage extends StatelessWidget {
                 crossAxisCount: 2,
               ),
               itemBuilder: (context, index) => PostItemSquare(
+                momentId: moments[index].id!,
                 imageUrl: moments[index].imageUrl,
               ),
               itemCount: moments.length,

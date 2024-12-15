@@ -1,52 +1,77 @@
 import 'dart:convert';
 
 class Comment {
-  String id;
+  String? id;
+  String? creatorId;
+  String? creatorUsername;
+  String? creatorFullname;
   String momentId;
-  String creator;
   String content;
-  DateTime createdAt;
+  late DateTime createdAt;
+  late DateTime lastUpdatedAt;
 
   Comment({
-    required this.id,
+    this.id,
+    this.creatorId,
+    this.creatorUsername,
+    this.creatorFullname,
     required this.momentId,
-    required this.creator,
     required this.content,
-    required this.createdAt,
-  });
+    DateTime? createdAt,
+    DateTime? lastUpdatedAt,
+  }) {
+    this.createdAt = createdAt ?? DateTime.now();
+    this.lastUpdatedAt = lastUpdatedAt ?? DateTime.now();
+  }
 
   Comment copyWith({
     String? id,
+    String? creatorId,
+    String? creatorUsername,
+    String? creatorFullname,
     String? momentId,
-    String? creator,
     String? content,
     DateTime? createdAt,
+    DateTime? lastUpdatedAt,
   }) =>
       Comment(
         id: id ?? this.id,
+        creatorId: creatorId ?? this.creatorId,
+        creatorUsername: creatorUsername ?? this.creatorUsername,
+        creatorFullname: creatorFullname ?? this.creatorFullname,
         momentId: momentId ?? this.momentId,
-        creator: creator ?? this.creator,
         content: content ?? this.content,
         createdAt: createdAt ?? this.createdAt,
+        lastUpdatedAt: lastUpdatedAt ?? this.lastUpdatedAt,
       );
 
-  factory Comment.fromMap(Map<String, dynamic> map) => Comment(
-        id: map['id'],
-        momentId: map['momentId'],
-        creator: map['creator'],
-        content: map['content'],
-        createdAt: DateTime.parse(map['createdAt']),
+  factory Comment.fromJson(String str) => Comment.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Comment.fromMap(Map<String, dynamic> json) => Comment(
+        id: json["id"],
+        creatorId: json["creatorId"],
+        creatorUsername: json["creatorUsername"],
+        creatorFullname: json["creatorFullname"],
+        momentId: json["momentId"],
+        content: json["content"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        lastUpdatedAt: DateTime.parse(json["lastUpdatedAt"]),
       );
 
   Map<String, dynamic> toMap() => {
-        'id': id,
-        'momentId': momentId,
-        'creator': creator,
-        'content': content,
-        'createdAt': createdAt.toIso8601String(),
+        "id": id,
+        "creatorId": creatorId,
+        "creatorUsername": creatorUsername,
+        "creatorFullname": creatorFullname,
+        "momentId": momentId,
+        "content": content,
+        "createdAt": createdAt.toIso8601String(),
+        "lastUpdatedAt": lastUpdatedAt.toIso8601String(),
       };
 
-  factory Comment.fromJson(String json) => Comment.fromMap(jsonDecode(json));
-
-  String toJson() => jsonEncode(toMap());
+  Map<String, dynamic> toDto() => {
+        "content": content,
+      };
 }

@@ -16,7 +16,7 @@ class PostTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(
-        moment.creator,
+        moment.creatorUsername.toString(),
         style:
             const TextStyle(fontWeight: FontWeight.bold, color: Colors.white70),
       ),
@@ -28,9 +28,13 @@ class PostTitle extends StatelessWidget {
       trailing: PopupMenuButton<String>(
         onSelected: (value) {
           if (value == 'Edit') {
-            context.read<MomentBloc>().add(MomentNavigateToUpdateEvent(moment.id));
+            context
+                .read<MomentBloc>()
+                .add(MomentNavigateToUpdateEvent(moment.id!));
           } else if (value == 'Delete') {
-            context.read<MomentBloc>().add(MomentNavigateToDeleteEvent(moment.id));
+            context
+                .read<MomentBloc>()
+                .add(MomentNavigateToDeleteEvent(moment.id!));
           }
         },
         itemBuilder: (context) => [
