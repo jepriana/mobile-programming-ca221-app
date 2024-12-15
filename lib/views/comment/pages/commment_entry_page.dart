@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/resources/dimentions.dart';
-
-import '../../../models/moment.dart';
+import '../../../core/resources/dimentions.dart';
 import '../../../core/resources/colors.dart';
 
 class CommentEntryPage extends StatefulWidget {
-  const CommentEntryPage({super.key, required this.onSaved});
-
-  final Function(Moment newMoment) onSaved;
+  static const routeName = '/comment/entry';
+  const CommentEntryPage({super.key, this.commentId});
+  final String? commentId;
 
   @override
   State<CommentEntryPage> createState() => _CommentEntryPageState();

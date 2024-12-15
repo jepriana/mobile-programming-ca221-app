@@ -7,7 +7,7 @@ import 'package:myapp/views/moment/pages/moment_search_page.dart';
 import 'package:myapp/core/resources/colors.dart';
 
 class MainPage extends StatefulWidget {
-  static const String routeName = '/';
+  static const String routeName = '/home';
   const MainPage({super.key});
 
   @override
