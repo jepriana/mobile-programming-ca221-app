@@ -6,15 +6,17 @@ import 'package:myapp/views/moment/pages/moment_page.dart';
 import 'package:myapp/views/moment/pages/moment_search_page.dart';
 import 'package:myapp/core/resources/colors.dart';
 
-class MainPage extends StatefulWidget {
+import '../../user/pages/user_page.dart';
+
+class HomePage extends StatefulWidget {
   static const String routeName = '/home';
-  const MainPage({super.key});
+  const HomePage({super.key});
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _HomePageState extends State<HomePage> {
   // Variabel untuk menyimpan index halaman yang aktif
   int _seletedPageIndex = 0;
 
@@ -49,9 +51,7 @@ class _MainPageState extends State<MainPage> {
       const Center(
         child: Text('Activity'),
       ),
-      const Center(
-        child: Text('Profile'),
-      ),
+      const UserPage(),
     ];
     return Scaffold(
       appBar: AppBar(

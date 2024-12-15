@@ -5,7 +5,7 @@ abstract class AbsAuthRepository {
   Future<(bool, String)> register(UserRegisterDto dataRegister);
   Future<(bool, String)> forgotPassword(String username);
   Future<bool> refreshToken();
-  Future<User?> info([bool force = false]);
+  Future<User?> info();
   Future logout();
   Future<bool> isAuthenticated();
 }

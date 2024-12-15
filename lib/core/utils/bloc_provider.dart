@@ -10,7 +10,6 @@ final blocProviders = [
     create: (context) => AuthenticationBloc(context.read<AbsAuthRepository>()),
   ),
   BlocProvider<MomentBloc>(
-    create: (context) =>
-        MomentBloc(RepositoryProvider.of<AbsMomentRepository>(context)),
+    create: (context) => MomentBloc(context.read<AbsMomentRepository>()),
   ),
 ];

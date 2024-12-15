@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../pages/login_page.dart';
-import '../../common/pages/main_page.dart';
+import '../../common/pages/home_page.dart';
 import '../../common/pages/splash_page.dart';
 import '../bloc/authentication_bloc.dart';
 import '../pages/register_page.dart';
@@ -79,14 +79,14 @@ class _AuthenticationNavigatorState extends State<AuthenticationNavigator> {
               content: Text(state.errorMessage),
             ),
           );
-          Navigator.pushReplacementNamed(context, MainPage.routeName);
+          Navigator.pushReplacementNamed(context, HomePage.routeName);
         }
       },
       builder: (context, state) {
         if (state.runtimeType == AuthenticationAuthenticatedState) {
           final activeState = state as AuthenticationAuthenticatedState;
           if (activeState.userData != null) {
-            return const MainPage();
+            return const HomePage();
           }
           return const LoginPage();
         } else if (state.runtimeType == AuthenticationLoadingState) {
