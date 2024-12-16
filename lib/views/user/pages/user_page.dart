@@ -17,16 +17,16 @@ class UserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final activeUser = context.watch<AuthenticationBloc>().activeUser;
-    final _faker = faker.Faker();
+    final oFaker = faker.Faker();
     List<Moment> moments = List.generate(
       6,
       (index) => Moment(
         id: nanoid(),
-        momentDate: _faker.date.dateTime(),
-        creatorUsername: _faker.person.name(),
-        location: _faker.address.city(),
+        momentDate: oFaker.date.dateTime(),
+        creatorUsername: oFaker.person.name(),
+        location: oFaker.address.city(),
         imageUrl: 'https://picsum.photos/800/600?random=$index',
-        caption: _faker.lorem.sentence(),
+        caption: oFaker.lorem.sentence(),
         totalLikes: faker.random.integer(1000),
         totalComments: faker.random.integer(100),
         totalBookmarks: faker.random.integer(10),
@@ -99,19 +99,20 @@ class UserPage extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: largeSize),
+          const SizedBox(height: mediumSize),
           Expanded(
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
               ),
               itemBuilder: (context, index) => PostItemSquare(
-              momentId: moments[index].id!,
+                momentId: moments[index].id!,
                 imageUrl: moments[index].imageUrl,
               ),
               itemCount: moments.length,
             ),
           ),
+          const SizedBox(height: largeSize),
         ],
       ),
     );
