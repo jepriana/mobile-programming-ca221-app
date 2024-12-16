@@ -77,19 +77,19 @@ class UserPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      FollowItem(
+                      UserDataItem(
                         label: 'Posts',
                         value: moments.length.toString(),
                       ),
-                      const FollowItem(
+                      const UserDataItem(
                         label: 'Bookmarks',
                         value: '0',
                       ),
-                      FollowItem(
+                      UserDataItem(
                         label: 'Followers',
                         value: '${activeUser?.followerCount ?? 0}',
                       ),
-                      FollowItem(
+                      UserDataItem(
                         label: 'Following',
                         value: '${activeUser?.followingCount ?? 0}',
                       ),

@@ -8,6 +8,7 @@ class DioInterceptor extends Interceptor {
   DioInterceptor({
     required this.dio,
   });
+  
   @override
   void onRequest(
     RequestOptions options,

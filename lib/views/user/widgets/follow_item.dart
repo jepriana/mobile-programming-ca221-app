@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:myapp/core/resources/dimentions.dart';
 
-class FollowItem extends StatelessWidget {
-  const FollowItem({
+class UserDataItem extends StatelessWidget {
+  const UserDataItem({
     super.key,
     required this.label,
     required this.value,
