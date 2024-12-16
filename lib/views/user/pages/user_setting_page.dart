@@ -24,6 +24,7 @@ class UserSettingPage extends StatelessWidget {
               leading: const Icon(Icons.logout_rounded),
               title: const Text('Logout'),
               onTap: () {
+                Navigator.of(context).pop();
                 context
                     .read<AuthenticationBloc>()
                     .add(AuthenticationLoggedOutEvent());
