@@ -33,7 +33,7 @@ class _LocationInputPageState extends State<LocationInputPage> {
         title: const Text('Pick Location'),
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.arrow_back_rounded)),
+            icon: const Icon(Icons.arrow_back_ios_new_rounded)),
       ),
       body: FlutterLocationPicker(
         key: UniqueKey(),

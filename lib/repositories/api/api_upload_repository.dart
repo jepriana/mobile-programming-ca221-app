@@ -26,7 +26,7 @@ class ApiUploadRepository extends AbsApiUploadRepository {
       "image": await MultipartFile.fromFile(
         file.path,
         filename: fileName,
-        contentType: MediaType("image", "jpeg"),
+        contentType: MediaType("image", "png"),
       ),
     });
     try {
