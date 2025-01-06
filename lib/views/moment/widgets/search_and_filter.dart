@@ -44,7 +44,7 @@ class _SearchAndFilterState extends State<SearchAndFilter> {
             color: Colors.transparent,
           ),
         ),
-        fillColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+        fillColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
         filled: true,
         prefixIcon: Container(
           margin: const EdgeInsets.only(left: mediumSize),

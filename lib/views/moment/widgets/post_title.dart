@@ -51,7 +51,7 @@ class PostTitle extends StatelessWidget {
                 ),
               ],
               child: CircleAvatar(
-                backgroundColor: Colors.white.withOpacity(0.5),
+                backgroundColor: Colors.white.withValues(alpha:  0.5),
                 child: const Icon(
                   Icons.more_vert,
                   color: primaryColor,

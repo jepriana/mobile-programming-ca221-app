@@ -8,7 +8,7 @@ class DioInterceptor extends Interceptor {
   DioInterceptor({
     required this.dio,
   });
-  
+
   @override
   void onRequest(
     RequestOptions options,
@@ -53,7 +53,7 @@ class DioInterceptor extends Interceptor {
       const baseUri = '$baseUrl/api/auth';
       final options = BaseOptions(baseUrl: baseUri.toString());
       final dio = Dio(options);
-      final response = await dio.post('refresh-token', data: {
+      final response = await dio.post('/refresh-token', data: {
         'refreshToken': refreshToken,
       });
       if (response.statusCode == 200 && spm != null) {
