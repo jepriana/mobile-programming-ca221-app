@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:myapp/core/resources/dimentions.dart';
+import 'package:myapp/views/common/pages/location_input_page.dart';
 import 'package:myapp/views/moment/bloc/moment_bloc.dart';
 
 import '../../../models/moment.dart';
 import '../../../core/resources/colors.dart';
+import '../../common/widgets/input_image.dart';
 
 class MomentEntryPage extends StatefulWidget {
   static const String routeName = '/moment/entry';
@@ -27,7 +29,6 @@ class _MomentEntryPageState extends State<MomentEntryPage> {
   // Text Editing Controller untuk set nilai awal pada text field
   final _momentDateController = TextEditingController();
   final _locationController = TextEditingController();
-  final _imageUrlController = TextEditingController();
   final _captionController = TextEditingController();
   // Date Format
   final _dateFormat = DateFormat('yyyy-MM-dd');
@@ -46,9 +47,11 @@ class _MomentEntryPageState extends State<MomentEntryPage> {
 
   void _initExistingData(Moment moment) {
     _updatedMoment = moment;
+    _dataMoment['imageUrl'] = moment.imageUrl;
+    _dataMoment['latitude'] = moment.latitude;
+    _dataMoment['longitude'] = moment.longitude;
     _momentDateController.text = _dateFormat.format(moment.momentDate);
     _locationController.text = moment.location;
-    _imageUrlController.text = moment.imageUrl;
     _captionController.text = moment.caption;
     _selectedDate = moment.momentDate;
   }
@@ -68,6 +71,8 @@ class _MomentEntryPageState extends State<MomentEntryPage> {
                   location: _dataMoment['location'],
                   imageUrl: _dataMoment['imageUrl'],
                   caption: _dataMoment['caption'],
+                  latitude: _dataMoment['latitude'],
+                  longitude: _dataMoment['longitude'],
                 ),
               ),
             );
@@ -77,6 +82,8 @@ class _MomentEntryPageState extends State<MomentEntryPage> {
           location: _dataMoment['location'],
           imageUrl: _dataMoment['imageUrl'],
           caption: _dataMoment['caption'],
+          latitude: _dataMoment['latitude'],
+          longitude: _dataMoment['longitude'],
         );
         context.read<MomentBloc>().add(MomentAddEvent(moment));
       }
@@ -112,13 +119,13 @@ class _MomentEntryPageState extends State<MomentEntryPage> {
         ),
         title: Text('${widget.momentId == null ? 'Create' : 'Update'} Moment'),
       ),
-      body: BlocListener<MomentBloc, MomentState>(
+      body: BlocConsumer<MomentBloc, MomentState>(
         listener: (context, state) {
           if (state is MomentGetByIdSuccessState) {
             _initExistingData(state.moment);
           }
         },
-        child: Padding(
+        builder: (context, state) => Padding(
           padding: const EdgeInsets.all(largeSize),
           child: Form(
             key: _formKey,
@@ -126,6 +133,13 @@ class _MomentEntryPageState extends State<MomentEntryPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  InputImage(
+                    key: UniqueKey(),
+                    onSelectImage: (imageUrl) {
+                      _dataMoment['imageUrl'] = imageUrl;
+                    },
+                    imageUrl: _dataMoment['imageUrl'],
+                  ),
                   const Text('Moment Date'),
                   TextFormField(
                     controller: _momentDateController,
@@ -154,50 +168,53 @@ class _MomentEntryPageState extends State<MomentEntryPage> {
                     },
                   ),
                   const Text('Location'),
-                  TextFormField(
-                    controller: _locationController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(0.0),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          controller: _locationController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(0.0),
+                            ),
+                            hintText: 'Moment location',
+                            prefixIcon: const Icon(Icons.location_pin),
+                          ),
+                          keyboardType: TextInputType.streetAddress,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter moment location';
+                            }
+                            return null;
+                          },
+                          onSaved: (newValue) {
+                            if (newValue != null) {
+                              _dataMoment['location'] = newValue;
+                            }
+                          },
+                        ),
                       ),
-                      hintText: 'Moment location',
-                      prefixIcon: const Icon(Icons.location_pin),
-                    ),
-                    keyboardType: TextInputType.streetAddress,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter moment location';
-                      }
-                      return null;
-                    },
-                    onSaved: (newValue) {
-                      if (newValue != null) {
-                        _dataMoment['location'] = newValue;
-                      }
-                    },
-                  ),
-                  const Text('Image URL'),
-                  TextFormField(
-                    controller: _imageUrlController,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(0.0),
-                      ),
-                      hintText: 'Moment image URL',
-                      prefixIcon: const Icon(Icons.image),
-                    ),
-                    keyboardType: TextInputType.url,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter moment image URL';
-                      }
-                      return null;
-                    },
-                    onSaved: (newValue) {
-                      if (newValue != null) {
-                        _dataMoment['imageUrl'] = newValue;
-                      }
-                    },
+                      const SizedBox(width: mediumSize),
+                      IconButton(
+                        icon: const Icon(Icons.location_searching),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => LocationInputPage(
+                                onLocationSelected:
+                                    (location, latitude, longitude) {
+                                  _dataMoment['location'] = location;
+                                  _dataMoment['latitude'] = latitude;
+                                  _dataMoment['longitude'] = longitude;
+                                  _locationController.text = location;
+                                },
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                    ],
                   ),
                   const Text('Caption'),
                   TextFormField(
